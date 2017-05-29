@@ -1,0 +1,31 @@
+{
+  "name": "customelements-playground",
+  "version": "1.0.0",
+  "description": "Custom Elements playground and tests.",
+  "scripts": {
+    "serve": "$(npm bin)/browser-sync start --s . --f . --port 3000 --reload-debounce 1500 --no-ui"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/serbanghita/CustomElements-PlayGround.git"
+  },
+  "keywords": [
+    "custom",
+    "elements",
+    "webcomponents",
+    "html5"
+  ],
+  "author": "Serban Ghita",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/serbanghita/CustomElements-PlayGround/issues"
+  },
+  "homepage": "https://github.com/serbanghita/CustomElements-PlayGround#readme",
+  "devDependencies": {
+    "@webcomponents/webcomponentsjs": "^1.0.1",
+    "browser-sync": "^2.18.12",
+    "document-register-element": "^1.4.1",
+    "eslint": "^3.19.0",
+    "jscs": "^3.0.7"
+  }
+}

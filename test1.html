@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Custom Elements v1 Test</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/document-register-element/1.3.0/document-register-element.max.js"></script>
+    <style>
+        td {
+            text-align: center;
+        }
+        tbody th {
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+<p>
+    This page defines the following custom elements and adds them to the table below using different methods:
+<ul>
+    <li>
+        <code>&lt;x-foo&gt;</code>:
+        An <a href="https://html.spec.whatwg.org/multipage/scripting.html#custom-elements-autonomous-example" target="_blank">autonomous custom element</a>.
+        When working properly, the <code>textContent</code> attribute of this element is changed to <em>Connected</em>.
+    </li>
+    <li>
+        <code>&lt;button is="fancy-button"&gt;</code>:
+        A <a href="https://html.spec.whatwg.org/multipage/scripting.html#custom-elements-customized-builtin-example" target="_blank">customized built-in element</a>.
+        When working properly, the <code>textContent</code> attribute of this element is changed to <em>Fancy Button!</em> and clicking it shows an alert with the text <em>I am a fancy button!</em>.
+    </li>
+</ul>
+</p>
+<table>
+    <thead>
+    <tr>
+        <th></th>
+        <th>&lt;x-foo&gt;</th>
+        <th>&lt;button is="fancy-button"&gt;</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <th>HTML</th>
+        <td>
+            <x-foo>&#x1F61E; NOT connected. &#x1F61E;</x-foo>
+        </td>
+        <td>
+            <button is="fancy-button" type="button">
+                &#x1F61E; Regular Button &#x1F61E;
+            </button>
+        </td>
+    </tr>
+    <tr>
+        <th>
+            <code>innerHTML</code>
+        </th>
+        <td id="inner-x-foo"></td>
+        <td id="inner-fancy-button"></td>
+    </tr>
+    <tr>
+        <th>Javascript constructor</th>
+        <td id="js-x-foo"></td>
+        <td id="js-fancy-button"></td>
+    </tr>
+    <tr>
+        <th>
+            <code>document.createElement</code>
+        </th>
+        <td id="create-x-foo"></td>
+        <td id="create-fancy-button"></td>
+    </tr>
+    </tbody>
+</table>
+
+<template>
+    <tr>
+        <th>
+            Cloned from a <code>&lt;template&gt;</code>
+        </th>
+        <td>
+            <x-foo>&#x1F61E; NOT connected. &#x1F61E;</x-foo>
+        </td>
+        <td>
+            <button is="fancy-button" type="button">
+                &#x1F61E; Regular Button &#x1F61E;
+            </button>
+        </td>
+    </tr>
+</template>
+
+<script>
+    // Define a custom element.
+    class XFoo extends HTMLElement {
+        constructor() {
+            super();
+        }
+        connectedCallback() {
+            this.textContent = 'Connected';
+        }
+    }
+    customElements.define( 'x-foo', XFoo );
+
+    // Define a custom element that extends the built-in button element.
+    class FancyButton extends HTMLButtonElement {
+        constructor() {
+            super();
+        }
+        connectedCallback() {
+            this.textContent = 'Fancy Button!';
+            this.addEventListener( 'click', e => alert( 'I am a fancy button!' ) );
+        }
+    }
+    customElements.define( 'fancy-button', FancyButton, { extends: 'button' } );
+
+    function query( selector ) {
+        return document.querySelector( selector );
+    }
+
+    // Add the custom elements to the table using innerHTML.
+    query( '#inner-x-foo' ).innerHTML = '<x-foo>&#x1F61E; NOT connected. &#x1F61E;</x-foo>';
+    query( '#inner-fancy-button' ).innerHTML = '<button is="fancy-button" type="button">&#x1F61E; Regular Button &#x1F61E;</button>';
+
+    // Add the custom elements to the table using the javascript constructors.
+    query( '#js-x-foo' ).appendChild( new XFoo() );
+    query( '#js-fancy-button' ).appendChild( new FancyButton );
+
+    // Add the custom elements to the table using document.createElement.
+    query( '#create-x-foo' ).appendChild( document.createElement( 'x-foo' ) );
+    query( '#create-fancy-button' ).appendChild(
+        document.createElement( 'button', { is: 'fancy-button' } )
+    );
+
+    // Add the custom elements to the table by cloning them from a <template> element.
+    const template = query( 'template' );
+    query( 'tbody' ).appendChild( template.content.cloneNode( true ) );
+</script>
+</body>
+</html>
